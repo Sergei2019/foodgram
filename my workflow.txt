@@ -1,0 +1,20 @@
+sudo docker rm -f infra_db_1 infra_backend_1 infra_frontend_1 infra_nginx_1
+sudo docker images
+sudo docker rmi .... ... ....
+
+sudo docker-compose up
+
+
+sudo docker cp ./ingredients.csv infra_db_1:/
+sudo docker cp ./tags.csv infra_db_1:/
+
+sudo docker exec -it infra_backend_1 bash
+python manage.py makemigrations
+python manage.py migrate
+python manage.py createsuperuser
+python manage.py collectstatic
+exit
+
+sudo docker exec -it infra_db_1 psql -U postgres4 postgres4
+\copy recipes_ingredient(name, measurement_unit) FROM '/ingredients.csv' DELIMITER ',' CSV
+\copy recipes_tag(name, slug, color) FROM '/tags.csv' DELIMITER ',' CSV
